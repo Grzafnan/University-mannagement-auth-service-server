@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 const app: Application = express();
 
@@ -8,6 +8,26 @@ app.use(cors());
 //* Parse Data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//* GET method route
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello from server!');
+});
+
+
+//* Resource not found
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(404).json({
+    success: false,
+    message: "No route found!"
+  })
+});
+
+//* Error Handler
+app.use((err:any, req:Request, res: Response, next:NextFunction) => {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+});
 
 
 export default app;
