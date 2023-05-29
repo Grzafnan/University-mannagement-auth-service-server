@@ -23,7 +23,7 @@ app.use((req: Request, res: Response) => {
 })
 
 //* Error Handler
-app.use((err: any, req: Request, res: any) => {
+app.use((err: any, req: Request, res: Response) => {
   console.error(err.stack)
   res.status(500).send('Something broke!')
 })
