@@ -6,11 +6,11 @@ export const createUserToDB = async (req: Request, res: Response) => {
     const user = await createUser(req.body)
     res.status(200).json({
       success: true,
+      message: 'User created successfully',
       data: user,
     })
   } catch (error: any) {
-    console.log(error.message)
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: error.message,
     })
