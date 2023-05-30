@@ -8,6 +8,7 @@ export const findLastUser = async (): Promise<string | undefined> => {
 }
 
 export const generateUserId = async (): Promise<string> => {
-  const id = (await findLastUser()) || (0).toString().padStart(5, '0')
-  return id
+  const lastUserId = await findLastUser()
+  const nextId = (Number(lastUserId) + 1 || 1).toString().padStart(5, '0')
+  return nextId
 }
