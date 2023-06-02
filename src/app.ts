@@ -15,7 +15,9 @@ app.use('/api/v1/users', userRoute)
 
 //* GET method route
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello from server!')
+  res.send(
+    `<h1 style="color:#1F4D90;font-size:2rem;text-align:center;background:#0D1117;height:100vh;">Hello from server! :-)</h1>`
+  )
 })
 
 //* Resource not found
@@ -28,7 +30,6 @@ app.use((req: Request, res: Response) => {
 
 //* Error Handler
 app.use((err: Error, req: Request, res: Response) => {
-  console.error(err.stack)
   res.status(500).send('Something broke!')
 })
 
