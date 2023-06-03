@@ -1,26 +1,25 @@
 import { Error } from 'mongoose'
 import { IGenericErrorMessage } from '../../interfaces/error'
+import { IGenericErrorResponse } from '../../interfaces/common'
 
-export const handleValidationError = (
+const handleValidationError = (
   err: Error.ValidationError
-): IGenericErrorMessage[] => {
-  const simplifiedError: IGenericErrorMessage[] = Object.keys(err.errors).map(
-    (key: string) => {
-      const error: Error.ValidatorError | Error.CastError = err.errors[key]
-      if (error instanceof Error.ValidatorError) {
-        return {
-          path: error?.path,
-          message: error?.message,
-        }
-      } else {
-        // Handle the case of CastError separately
-        return {
-          path: error?.path,
-          message: error?.stringValue,
-        }
+): IGenericErrorResponse => {
+  const errors: IGenericErrorMessage[] = Object.values(err.errors).map(
+    (el: Error.ValidatorError | Error.CastError) => {
+      return {
+        path: el?.path,
+        message: el?.message,
       }
     }
   )
 
-  return simplifiedError
+  const statusCode = 400
+  return {
+    statusCode,
+    message: 'Validation Error',
+    errorMessages: errors,
+  }
 }
+
+export default handleValidationError

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import config from '../../config'
-import { CustomError, IGenericErrorMessage } from '../../interfaces/error'
-import { handleValidationError } from './handleValidationError'
+import { IGenericErrorMessage } from '../../interfaces/error'
 import { logger } from '../../shared/logger'
+import handleValidationError from './handleValidationError'
 
 const globalErrorHandler = (
-  err: CustomError,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
