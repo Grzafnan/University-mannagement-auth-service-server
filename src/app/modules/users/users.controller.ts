@@ -13,7 +13,7 @@ export const createUserToDB = async (
       message: 'User created successfully',
       data: user,
     })
-  } catch (error: any) {
+  } catch (error) {
     next(error)
   }
 }
