@@ -1,25 +1,46 @@
-import { NextFunction, Request, Response } from 'express'
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
+import { error } from 'winston'
 import config from '../../config'
-import { CustomError, IGenericErrorMessage } from '../../interfaces/error'
-import { handleValidationError } from './handleValidationError'
-import { logger } from '../../shared/logger'
+import ApiError from '../../errors/ApiError'
+import handleValidationError from './handleValidationError'
+import { IGenericErrorMessage } from '../../interfaces/error'
 
-const globalErrorHandler = (
-  err: CustomError,
+const globalErrorHandler: ErrorRequestHandler = (
+  err,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // console.log(err)
-  res.status(400).json({ error: err })
-
-  const statusCode = 500
-  const message = 'Generic error occurred'
-  const errorMessages: IGenericErrorMessage[] = []
+  let statusCode = 500
+  let message = 'Generic error occurred'
+  let errorMessages: IGenericErrorMessage[] = []
 
   if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err)
-    logger.error(simplifiedError)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorMessages = simplifiedError.errorMessages
+  } else if (error instanceof ApiError) {
+    statusCode = error?.statusCode
+    message = error?.message
+    errorMessages = error?.message
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
+      : []
+  } else if (error instanceof Error) {
+    message = error?.message
+    errorMessages = error?.message
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
+      : []
   }
 
   res.status(statusCode).json({
