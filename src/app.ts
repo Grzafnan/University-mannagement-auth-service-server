@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 import userRoute from './app/modules/users/users.route'
+import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app: Application = express()
 
 //* Using Cors
@@ -28,9 +29,7 @@ app.use((req: Request, res: Response) => {
   })
 })
 
-//* Error Handler
-app.use((err: Error, req: Request, res: Response) => {
-  res.status(500).send('Something broke!')
-})
+// //* Global Error Handler
+app.use(globalErrorHandler)
 
 export default app
