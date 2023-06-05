@@ -1,7 +1,7 @@
 import {
   IAcademicSemesterCodes,
   IAcademicSemesterTitles,
-  Month,
+  IMonth,
 } from './academicSemester.interface';
 
 export const academicSemesterTitles: IAcademicSemesterTitles[] = [
@@ -16,7 +16,7 @@ export const academicSemesterCodes: IAcademicSemesterCodes[] = [
   '03',
 ];
 
-export const academicSemesterMonths: Month[] = [
+export const academicSemesterMonths: IMonth[] = [
   'January',
   'February',
   'March',
