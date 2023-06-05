@@ -16,11 +16,16 @@ app.use('/api/v1/users', UserRoutes)
 
 //* GET method route
 app.get('/', async (req: Request, res: Response) => {
-  Promise.reject(new Error('Unhandled Promise Rejection!!!'))
   res.send(
     `<h1 style="color:#1F4D90;font-size:2rem;text-align:center;background:#0D1117;height:100vh;">Hello from server! :-)</h1>`
   )
 })
+
+//* Testing
+// app.get('/test', async (req: Request, res: Response) => {
+//   Promise.reject(new Error('Unhandled Promise Rejection!!!'))
+//   // throw new Error('Testiing error')
+// })
 
 //* Resource not found
 app.use((req: Request, res: Response) => {
