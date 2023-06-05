@@ -4,7 +4,7 @@ export type IAcademicSemesterTitles = 'Autumn' | 'Summer' | 'Fall';
 
 export type IAcademicSemesterCodes = '01' | '02' | '03';
 
-export type Month =
+export type IMonth =
   | 'January'
   | 'February'
   | 'March'
@@ -22,8 +22,8 @@ export type IAcademicSemester = {
   title: IAcademicSemesterTitles;
   year: number;
   code: IAcademicSemesterCodes;
-  startMonth: Month;
-  endMonth: Month;
+  startMonth: IMonth;
+  endMonth: IMonth;
 };
 
 export type AcademicSemesterModel = Model<IAcademicSemester, object>;
