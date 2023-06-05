@@ -3,28 +3,37 @@ import {
   IAcademicSemester,
   AcademicSemesterModel,
 } from './academicSemester.interface';
+import {
+  academicSemesterCodes,
+  academicSemesterMonths,
+  academicSemesterTitles,
+} from './academicSemester.constant';
 
 const academicSemesterSchema = new Schema<IAcademicSemester>(
   {
     title: {
-      type: 'string',
+      type: String,
       required: true,
+      enum: academicSemesterTitles,
     },
     year: {
-      type: 'number',
+      type: Number,
       required: true,
     },
     code: {
-      type: 'string',
+      type: String,
       required: true,
+      enum: academicSemesterCodes,
     },
     startMonth: {
-      type: 'string',
+      type: String,
       required: true,
+      enum: academicSemesterMonths,
     },
     endMonth: {
-      type: 'string',
+      type: String,
       required: true,
+      enum: academicSemesterMonths,
     },
   },
   {
