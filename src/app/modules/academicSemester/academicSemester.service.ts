@@ -17,6 +17,7 @@ const createAcademicSemester = async (
     );
   }
   const createdAcademicSemester = AcademicSemester.create(academicSemester);
+
   if (!createdAcademicSemester) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
