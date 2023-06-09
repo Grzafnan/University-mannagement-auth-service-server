@@ -33,11 +33,11 @@ app.get('/', async (req: Request, res: Response) => {
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
     success: false,
-    message: 'No route found!',
+    message: 'API not route found!',
     errorMessages: [
       {
         path: req.originalUrl,
-        message: 'Api not found!',
+        message: 'API route not found!',
       },
     ],
   });

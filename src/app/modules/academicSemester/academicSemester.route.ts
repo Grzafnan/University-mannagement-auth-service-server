@@ -10,4 +10,6 @@ router.post(
   AcademicSemesterController.createAcademicSemesterToDB
 );
 
+router.get('/', AcademicSemesterController.getAllSemesters);
+
 export const AcademicSemesterRoutes = router;
