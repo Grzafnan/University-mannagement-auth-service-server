@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
+import httpStatus from 'http-status';
 
 const app: Application = express();
 
@@ -29,11 +30,18 @@ app.get('/', async (req: Request, res: Response) => {
 // })
 
 //* Resource not found
-app.use((req: Request, res: Response) => {
-  res.status(404).json({
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(httpStatus.NOT_FOUND).json({
     success: false,
     message: 'No route found!',
+    errorMessages: [
+      {
+        path: req.originalUrl,
+        message: 'Api not found!',
+      },
+    ],
   });
+  next();
 });
 
 // //* Global Error Handler
