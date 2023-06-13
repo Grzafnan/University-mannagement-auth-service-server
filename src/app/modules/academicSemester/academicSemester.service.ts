@@ -5,7 +5,10 @@ import {
   IAcademicSemesterFilters,
 } from './academicSemester.interface';
 import AcademicSemester from './academicSemester.model';
-import { academicSemesterTitleCodeMapper } from './academicSemester.constant';
+import {
+  academicSemesterSearchableFields,
+  academicSemesterTitleCodeMapper,
+} from './academicSemester.constant';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
@@ -41,9 +44,7 @@ const getAllSemesters = async (
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
 
-  const { searchTerm } = filters;
-
-  const academicSemesterSearchableFields = ['title', 'year', 'code'];
+  const { searchTerm, ...filtersData } = filters;
 
   const andConditions = [];
   if (searchTerm) {
@@ -56,6 +57,15 @@ const getAllSemesters = async (
       })),
     });
   }
+
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
   // const andConditions = [
   //   {
   //     $or: [
