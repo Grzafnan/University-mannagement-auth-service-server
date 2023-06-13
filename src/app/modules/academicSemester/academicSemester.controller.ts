@@ -4,8 +4,12 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
 import pick from '../../../shared/pick';
+import {
+  IAcademicSemester,
+  IAcademicSemesterFilters,
+} from './academicSemester.interface';
+import { filterFields } from '../../../constants/filter';
 import { paginationFields } from '../../../constants/pagination';
-import { IAcademicSemester } from './academicSemester.interface';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 
 const createAcademicSemesterToDB = catchAsync(
@@ -28,12 +32,15 @@ const createAcademicSemesterToDB = catchAsync(
 
 const getAllSemesters = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const filters: IAcademicSemesterFilters = pick(req.query, filterFields);
+
     const paginationOptions: IPaginationOptions = pick(
       req.query,
       paginationFields
     );
 
     const result = await AcademicSemesterService.getAllSemesters(
+      filters,
       paginationOptions
     );
 
