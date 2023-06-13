@@ -30,6 +30,21 @@ const createAcademicSemesterToDB = catchAsync(
   }
 );
 
+const getSingleSemester = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+
+    const result = await AcademicSemesterService.getSingleSemester(id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Semester Retrieved Successfully!',
+      data: result,
+    });
+    next();
+  }
+);
+
 const getAllSemesters = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const filters: IAcademicSemesterFilters = pick(
@@ -60,5 +75,6 @@ const getAllSemesters = catchAsync(
 
 export const AcademicSemesterController = {
   createAcademicSemesterToDB,
+  getSingleSemester,
   getAllSemesters,
 };
