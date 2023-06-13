@@ -8,9 +8,9 @@ import {
   IAcademicSemester,
   IAcademicSemesterFilters,
 } from './academicSemester.interface';
-import { filterFields } from '../../../constants/filter';
 import { paginationFields } from '../../../constants/pagination';
 import { IPaginationOptions } from '../../../interfaces/pagination';
+import { academicSemesterFilterableFields } from './academicSemester.constant';
 
 const createAcademicSemesterToDB = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +32,10 @@ const createAcademicSemesterToDB = catchAsync(
 
 const getAllSemesters = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const filters: IAcademicSemesterFilters = pick(req.query, filterFields);
+    const filters: IAcademicSemesterFilters = pick(
+      req.query,
+      academicSemesterFilterableFields
+    );
 
     const paginationOptions: IPaginationOptions = pick(
       req.query,
