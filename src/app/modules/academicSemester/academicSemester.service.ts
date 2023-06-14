@@ -102,8 +102,20 @@ const getAllSemesters = async (
   };
 };
 
+const updateSemester = async (
+  id: string,
+  payload: Partial<IAcademicSemester>
+) => {
+  const result = await AcademicSemester.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+
+  return result;
+};
+
 export const AcademicSemesterService = {
   createAcademicSemester,
   getSingleSemester,
   getAllSemesters,
+  updateSemester,
 };
