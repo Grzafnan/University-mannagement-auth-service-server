@@ -40,7 +40,7 @@ const createAcademicSemester = async (
 const getSingleSemester = async (
   id: string
 ): Promise<IAcademicSemester | null> => {
-  const result = await AcademicSemester.findById(id).exec();
+  const result = await AcademicSemester.findById(id);
   if (!result) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid academic semester id!');
   }
