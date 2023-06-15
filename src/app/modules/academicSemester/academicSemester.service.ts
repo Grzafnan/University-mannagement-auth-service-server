@@ -105,7 +105,7 @@ const getAllSemesters = async (
 const updateSemester = async (
   id: string,
   payload: Partial<IAcademicSemester>
-) => {
+): Promise<IAcademicSemester | null> => {
   if (
     payload.title &&
     payload.code &&
@@ -124,9 +124,17 @@ const updateSemester = async (
   return result;
 };
 
+const deleteSemester = async (
+  id: string
+): Promise<IAcademicSemester | null> => {
+  const result = await AcademicSemester.findByIdAndDelete({ _id: id });
+  return result;
+};
+
 export const AcademicSemesterService = {
   createAcademicSemester,
   getSingleSemester,
   getAllSemesters,
   updateSemester,
+  deleteSemester,
 };
