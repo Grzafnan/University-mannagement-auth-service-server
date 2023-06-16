@@ -89,6 +89,12 @@ const getSingleDepartment = async (
   const result = await AcademicDepartment.findById({ _id: id }).populate(
     'academicFaculty'
   );
+  if (!result) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Invalid academic department id!'
+    );
+  }
   return result;
 };
 

@@ -43,6 +43,7 @@ const getAllDepartment = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Academic Departments retrieved successfully.',
+    meta: result.meta,
     data: result,
   });
 });
