@@ -1,9 +1,13 @@
 /* eslint-disable prefer-const */
+import { ENUM_USER_ROLE } from '../../../enums/user';
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
 import User from './user.model';
 
 export const findLastStudentId = async (): Promise<string | undefined> => {
-  const user = await User.findOne({}, { id: 1, _id: 0 })
+  const user = await User.findOne(
+    { role: ENUM_USER_ROLE.STUDENT },
+    { id: 1, _id: 0 }
+  )
     .sort({ createdAt: -1 })
     .lean();
 
@@ -23,11 +27,14 @@ export const generateStudentId = async (
 };
 
 export const findLastFacultyId = async (): Promise<string | undefined> => {
-  const lastFacultyId = await User.findOne({}, { id: 1, _id: 0 })
+  const lastFacultyId = await User.findOne(
+    { role: ENUM_USER_ROLE.FACULTY },
+    { id: 1, _id: 0 }
+  )
     .sort({ createdAt: -1 })
     .lean();
 
-  return lastFacultyId?.id ? lastFacultyId.id.substring(4) : undefined;
+  return lastFacultyId?.id ? lastFacultyId.id.substring(2) : undefined;
 };
 
 export const generateFacultyId = async (): Promise<string> => {
@@ -38,11 +45,14 @@ export const generateFacultyId = async (): Promise<string> => {
 };
 
 export const findLastAdminId = async (): Promise<string | undefined> => {
-  const lastAdminId = await User.findOne({}, { id: 1, _id: 0 })
+  const lastAdminId = await User.findOne(
+    { role: ENUM_USER_ROLE.ADMIN },
+    { id: 1, _id: 0 }
+  )
     .sort({ createdAt: -1 })
     .lean();
 
-  return lastAdminId?.id ? lastAdminId.id.substring(4) : undefined;
+  return lastAdminId?.id ? lastAdminId.id.substring(2) : undefined;
 };
 
 export const generateAdminId = async (): Promise<string> => {
@@ -53,7 +63,10 @@ export const generateAdminId = async (): Promise<string> => {
 };
 
 export const findLastSuperAdminId = async (): Promise<string | undefined> => {
-  const lastSuperAdminId = await User.findOne({}, { id: 1, _id: 0 })
+  const lastSuperAdminId = await User.findOne(
+    { role: ENUM_USER_ROLE.SUPPER_ADMIN },
+    { id: 1, _id: 0 }
+  )
     .sort({ createdAt: -1 })
     .lean();
 
