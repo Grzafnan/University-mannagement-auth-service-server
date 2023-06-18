@@ -1,51 +1,85 @@
+/* eslint-disable no-unused-vars */
+import mongoose from 'mongoose';
+import { IStudent } from './../student/student.interface';
 import httpStatus from 'http-status';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { IUser } from './user.interface';
 import User from './user.model';
-import {
-  generateAdminId,
-  generateFacultyId,
-  generateStudentId,
-  generateSuperAdminId,
-} from './user.utils';
+import { generateStudentId } from './user.utils';
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { ENUM_USER_ROLE } from '../../../enums/user';
+import AcademicSemester from '../academicSemester/academicSemester.model';
+import Student from '../student/student.model';
 
-const createUser = async (user: IUser): Promise<IUser | null> => {
-  // generated incremental id
-  const academicSemester: IAcademicSemester = {
-    title: 'Summer',
-    year: '2023',
-    code: '01',
-    startMonth: 'January',
-    endMonth: 'May',
-  };
-
-  if (user.role === ENUM_USER_ROLE.STUDENT) {
-    user.id = await generateStudentId(academicSemester);
-  } else if (user.role === ENUM_USER_ROLE.FACULTY) {
-    user.id = await generateFacultyId();
-  } else if (user.role === ENUM_USER_ROLE.ADMIN) {
-    user.id = await generateAdminId();
-  } else if (user.role === ENUM_USER_ROLE.SUPPER_ADMIN) {
-    user.id = await generateSuperAdminId();
-  } else {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Unknown User type!');
-  }
-
+const createStudent = async (
+  student: IStudent,
+  user: IUser
+): Promise<IUser | null> => {
   if (!user.password) {
     // default password
-    user.password = config.default_user_pass as string;
+    user.password = config.default_student_pass as string;
   }
 
-  const createdUser = User.create(user);
-  if (!createdUser) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create user!');
+  user.role = ENUM_USER_ROLE.STUDENT;
+
+  const academicSemester: IAcademicSemester | null =
+    await AcademicSemester.findById(student.academicSemester);
+
+  const session = await mongoose.startSession();
+  let newUserAllData = null;
+  try {
+    session.startTransaction();
+    // Generate Student and User Id
+    const id = await generateStudentId(academicSemester);
+    user.id = id;
+    student.id = id;
+
+    // GET student as array
+    const newStudent = await Student.create([student], { session });
+    if (!newStudent.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create student!');
+    }
+
+    // Set student ID: into user.student
+    user.student = newStudent[0]._id;
+
+    // Create and GET user as Array
+    const newUser = await User.create([user], { session });
+    if (!newUser.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create user!');
+    }
+    newUserAllData = newUser[0];
+    //Session end after all operation is successful
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
   }
-  return createdUser;
+
+  // User --> Student --> academicSemester , academicFaculty, academicDepartment
+  if (newUserAllData) {
+    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
+      path: 'student',
+      populate: [
+        {
+          path: 'academicSemester',
+        },
+        {
+          path: 'academicFaculty',
+        },
+        {
+          path: 'academicDepartment',
+        },
+      ],
+    });
+  }
+
+  return newUserAllData;
 };
 
 export const UserService = {
-  createUser,
+  createStudent,
 };
