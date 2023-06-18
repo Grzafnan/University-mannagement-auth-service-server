@@ -4,7 +4,7 @@ import { Blood, Gender } from '../student/student.constant';
 //* Create user request validation by Zod
 const createUserZodSchema = z.object({
   body: z.object({
-    password: z.string(),
+    password: z.string().optional(),
     student: z.object({
       name: z.object(
         {
@@ -20,9 +20,7 @@ const createUserZodSchema = z.object({
           required_error: 'Name is required!',
         }
       ),
-      email: z.string({
-        required_error: 'Email is required!',
-      }),
+      email: z.string().email(),
       gender: z.enum([...Gender] as [string, ...string[]], {
         required_error: 'Gender is required!',
       }),
