@@ -1,37 +1,32 @@
-import { Model } from 'mongoose';
-
-export type IBlood = 'O+' | 'O-' | 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-';
+import { Model, Types } from 'mongoose';
+import {
+  IBlood,
+  IGender,
+  IGuardian,
+  ILocalGuardian,
+  IUserName,
+} from '../../../interfaces/common';
+import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
+import { IAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
+import { IAcademicFaculty } from '../academicFaculty/academicFaculty.interface';
 
 export type IStudent = {
   id: string;
-  name: {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-  };
+  name: IUserName;
   email: string;
-  gender: string;
-  dateOfBirth: Date;
+  gender: IGender;
+  dateOfBirth: string;
+  profileImage: string;
   contactNo: string;
   emergencyContactNo: string;
   presentAddress: string;
   permanentAddress: string;
   bloodGroup: IBlood;
-  guardian: {
-    fatherName: string;
-    fatherOccupation: string;
-    fatherContactNo: string;
-    motherName: string;
-    motherOccupation: string;
-    motherContactNo: string;
-    address: string;
-  };
-  localGuardian: {
-    name: string;
-    occupation: string;
-    contactNo: string;
-    address: string;
-  };
+  guardian: IGuardian;
+  localGuardian: ILocalGuardian;
+  academicFaculty: Types.ObjectId | IAcademicFaculty;
+  academicSemester: Types.ObjectId | IAcademicSemester;
+  academicDepartment: Types.ObjectId | IAcademicDepartment;
 };
 
-export type IStudentModel = Model<IStudent, object>;
+export type IStudentModel = Model<IStudent, Record<string, unknown>>;

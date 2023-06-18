@@ -1,4 +1,4 @@
-import { IBlood } from './student.interface';
+import { IBlood, IGender } from '../../../interfaces/common';
 
 export const Blood: IBlood[] = [
   'O+',
@@ -10,3 +10,5 @@ export const Blood: IBlood[] = [
   'AB+',
   'AB-',
 ];
+
+export const Gender: IGender[] = ['Male', 'Female', 'Others'];
