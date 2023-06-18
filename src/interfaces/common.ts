@@ -2,7 +2,7 @@ import { IGenericErrorMessage } from './error';
 
 export type IUserName = {
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
 };
 

@@ -10,6 +10,7 @@ export const StudentSchema = new Schema<IStudent, IStudentModel>(
       unique: true,
     },
     name: {
+      required: true,
       type: {
         firstName: {
           type: String,
