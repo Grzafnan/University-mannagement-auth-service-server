@@ -5,6 +5,20 @@ import { studentSearchableFields } from './student.constant';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
+import ApiError from '../../../errors/ApiError';
+import httpStatus from 'http-status';
+
+const getSingleStudent = async (id: string): Promise<IStudent | null> => {
+  const result = await Student.findOne({ id }).populate([
+    { path: 'academicFaculty' },
+    { path: 'academicDepartment' },
+    { path: 'academicSemester' },
+  ]);
+  if (!result) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Could not find student!');
+  }
+  return result;
+};
 
 const getAllStudents = async (
   filters: IStudentFilters,
@@ -73,5 +87,6 @@ const getAllStudents = async (
 };
 
 export const StudentService = {
+  getSingleStudent,
   getAllStudents,
 };

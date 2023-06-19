@@ -9,6 +9,18 @@ import { studentFilterableFields } from './student.constant';
 import sendResponse from '../../../shared/sendResponse';
 import { Request, Response } from 'express';
 
+const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const result = await StudentService.getSingleStudent(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Semester Retrieved Successfully!',
+    data: result,
+  });
+});
+
 const getAllStudents = catchAsync(async (req: Request, res: Response) => {
   const filters: IStudentFilters = pick(req.query, studentFilterableFields);
 
@@ -31,4 +43,4 @@ const getAllStudents = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const StudentController = { getAllStudents };
+export const StudentController = { getAllStudents, getSingleStudent };

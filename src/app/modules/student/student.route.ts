@@ -10,6 +10,8 @@ const router = express.Router();
 //   StudentController.updateStudent
 // );
 
+router.get('/:id', StudentController.getSingleStudent);
+
 router.get('/', StudentController.getAllStudents);
 
 export const StudentRoutes = router;
