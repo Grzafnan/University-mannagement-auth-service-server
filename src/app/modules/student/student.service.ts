@@ -86,7 +86,33 @@ const getAllStudents = async (
   };
 };
 
+const updateStudent = async (
+  id: string,
+  payload: Partial<IStudent>
+): Promise<IStudent | null> => {
+  const result = await Student.findOneAndUpdate({ id }, payload, {
+    new: true,
+  }).populate([
+    { path: 'academicFaculty' },
+    { path: 'academicDepartment' },
+    { path: 'academicSemester' },
+  ]);
+
+  return result;
+};
+
+const deleteStudent = async (id: string): Promise<IStudent | null> => {
+  const result = await Student.findOneAndDelete({ id }).populate([
+    { path: 'academicFaculty' },
+    { path: 'academicDepartment' },
+    { path: 'academicSemester' },
+  ]);
+  return result;
+};
+
 export const StudentService = {
   getSingleStudent,
   getAllStudents,
+  updateStudent,
+  deleteStudent,
 };
