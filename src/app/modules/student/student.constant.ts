@@ -12,3 +12,21 @@ export const Blood: IBlood[] = [
 ];
 
 export const Gender: IGender[] = ['Male', 'Female', 'Others'];
+
+export const studentSearchableFields = [
+  'id',
+  'email',
+  'contactNo',
+  'name.firstName',
+  'name.middleName',
+  'name.lastName',
+];
+
+export const studentFilterableFields: string[] = [
+  'searchTerm',
+  'id',
+  'bloodGroup',
+  'email',
+  'contactNo',
+  'emergencyContactNo',
+];
