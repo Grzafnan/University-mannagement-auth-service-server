@@ -11,6 +11,7 @@ const router = express.Router();
 // );
 
 router.get('/:id', StudentController.getSingleStudent);
+router.delete('/:id', StudentController.deleteStudent);
 
 router.get('/', StudentController.getAllStudents);
 
