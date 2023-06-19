@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SortOrder } from 'mongoose';
 import Student from './student.model';
 import { IStudent, IStudentFilters } from './student.interface';
@@ -90,7 +91,40 @@ const updateStudent = async (
   id: string,
   payload: Partial<IStudent>
 ): Promise<IStudent | null> => {
-  const result = await Student.findOneAndUpdate({ id }, payload, {
+  const isExists = await Student.findOne({ id });
+  if (!isExists) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student not found!!!');
+  }
+
+  const { name, guardian, localGuardian, ...student } = payload;
+
+  const updatedStudentData: Partial<IStudent> = { ...student };
+
+  // Dynamically Handling Update
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}`;
+      (updatedStudentData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+
+  if (guardian && Object.keys(guardian).length > 0) {
+    Object.keys(guardian).forEach(key => {
+      const guardianKey = `guardian.${key}`;
+      (updatedStudentData as any)[guardianKey] =
+        guardian[key as keyof typeof guardian];
+    });
+  }
+
+  if (localGuardian && Object.keys(localGuardian).length > 0) {
+    Object.keys(localGuardian).forEach(key => {
+      const localGuardianKey = `localGuardian.${key}`;
+      (updatedStudentData as any)[localGuardianKey] =
+        localGuardian[key as keyof typeof localGuardian];
+    });
+  }
+
+  const result = await Student.findOneAndUpdate({ id }, updatedStudentData, {
     new: true,
   }).populate([
     { path: 'academicFaculty' },
