@@ -23,12 +23,6 @@ app.get('/', async (req: Request, res: Response) => {
   );
 });
 
-//* Testing
-// app.get('/test', async (req: Request, res: Response) => {
-//   Promise.reject(new Error('Unhandled Promise Rejection!!!'))
-//   // throw new Error('Testiing error')
-// })
-
 //* Resource not found
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
