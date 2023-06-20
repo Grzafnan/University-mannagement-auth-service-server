@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { ENUM_USER_ROLE } from './../../../enums/user';
 import mongoose from 'mongoose';
 import { IStudent } from './../student/student.interface';
 import httpStatus from 'http-status';
@@ -8,7 +9,6 @@ import { IUser } from './user.interface';
 import User from './user.model';
 import { generateStudentId } from './user.utils';
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { ENUM_USER_ROLE } from '../../../enums/user';
 import AcademicSemester from '../academicSemester/academicSemester.model';
 import Student from '../student/student.model';
 
