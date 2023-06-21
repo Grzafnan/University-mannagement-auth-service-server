@@ -23,7 +23,7 @@ const managementDepartmentSchema = new Schema<IManagementDepartment>(
 );
 
 managementDepartmentSchema.pre('save', async function (next) {
-  const isxist = await ManagementDepartment.findOne({
+  const isExist = await ManagementDepartment.findOne({
     title: this.title,
   });
   if (isExist) {
