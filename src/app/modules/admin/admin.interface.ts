@@ -1,9 +1,8 @@
 import { Model, Types } from 'mongoose';
-import { IAcademicFaculty } from '../academicFaculty/academicFaculty.interface';
-import { IAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 import { IBlood, IGender, IUserName } from '../../../interfaces/common';
+import { IAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 
-export type IFaculty = {
+export type IAdmin = {
   id: string;
   name: IUserName;
   email: string;
@@ -16,13 +15,12 @@ export type IFaculty = {
   permanentAddress: string;
   bloodGroup: IBlood;
   designation: string;
-  academicFaculty: Types.ObjectId | IAcademicFaculty;
-  academicDepartment: Types.ObjectId | IAcademicDepartment;
+  managementDepartment: Types.ObjectId | IAcademicDepartment;
 };
 
-export type IFacultyModel = Model<IFaculty, Record<string, unknown>>;
+export type IAdminModel = Model<IAdmin, Record<string, unknown>>;
 
-export type IFacultyFilters = {
+export type IAdminFilters = {
   searchTerm?: string;
   id?: string;
   bloodGroup?: string;
