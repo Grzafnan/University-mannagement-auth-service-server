@@ -5,6 +5,10 @@ import routes from './app/routes';
 import httpStatus from 'http-status';
 
 const app: Application = express();
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
+// Set the views directory
+app.set('views', 'views');
 
 //* Using Cors
 app.use(cors());
@@ -16,11 +20,25 @@ app.use(express.urlencoded({ extended: true }));
 //* User routes
 app.use('/api/v1', routes);
 
-//* GET method route
+// GET method route
 app.get('/', async (req: Request, res: Response) => {
-  res.send(
-    `<h1 style="color:#1F4D90;font-size:2rem;text-align:center;background:#0D1117;height:100vh;">Hello from server! :-)</h1>`
-  );
+  // Simulate server status
+  const serverStatus: {
+    online: boolean;
+    message: string;
+  } = {
+    online: true,
+    message:
+      'Welcome to Landed University Auth Management server is up and running!',
+  };
+
+  // Determine the server status based on the HTTP response status
+  if (res.statusCode !== httpStatus.OK) {
+    serverStatus.online = false;
+    serverStatus.message = 'Server is currently offline.';
+  }
+
+  res.render('status', { serverStatus });
 });
 
 //* Resource not found
