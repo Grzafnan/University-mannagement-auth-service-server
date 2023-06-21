@@ -27,10 +27,7 @@ export const generateStudentId = async (
 };
 
 export const findLastFacultyId = async (): Promise<string | undefined> => {
-  const lastFacultyId = await User.findOne(
-    { role: ENUM_USER_ROLE.FACULTY },
-    { id: 1, _id: 0 }
-  )
+  const lastFacultyId = await User.findOne({}, { id: 1, _id: 0 })
     .sort({ createdAt: -1 })
     .lean();
 
