@@ -142,7 +142,7 @@ const deleteStudent = async (id: string): Promise<IStudent | null> => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found to deleted!');
   }
 
-  const result = await Student.findOneAndDelete({
+  const rsult = await Student.findOneAndDelete({
     id: deletedUser.id,
   }).populate([
     { path: 'academicFaculty' },
