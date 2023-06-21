@@ -8,6 +8,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
+import User from '../user/user.model';
 
 const getSingleStudent = async (id: string): Promise<IStudent | null> => {
   const result = await Student.findOne({ id }).populate([
@@ -136,7 +137,14 @@ const updateStudent = async (
 };
 
 const deleteStudent = async (id: string): Promise<IStudent | null> => {
-  const result = await Student.findOneAndDelete({ id }).populate([
+  const deletedUser = await User.findOneAndDelete({ id });
+  if (!deletedUser) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found to deleted!');
+  }
+
+  const result = await Student.findOneAndDelete({
+    id: deletedUser.id,
+  }).populate([
     { path: 'academicFaculty' },
     { path: 'academicDepartment' },
     { path: 'academicSemester' },
