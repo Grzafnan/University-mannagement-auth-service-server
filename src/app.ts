@@ -20,9 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 //* User routes
 app.use('/api/v1', routes);
 
-// GET method route
+// Home GET route
 app.get('/', async (req: Request, res: Response) => {
-  // Simulate server status
   const serverStatus: {
     online: boolean;
     message: string;
@@ -43,15 +42,10 @@ app.get('/', async (req: Request, res: Response) => {
 
 //* Resource not found
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(httpStatus.NOT_FOUND).json({
-    success: false,
-    message: 'API not route found!',
-    errorMessages: [
-      {
-        path: req.originalUrl,
-        message: 'API route not found!',
-      },
-    ],
+  res.status(httpStatus.NOT_FOUND).render('not-found', {
+    error: {
+      path: req.originalUrl,
+    },
   });
   next();
 });

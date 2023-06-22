@@ -17,14 +17,13 @@
   <body class="bg-gray-100">
     <div class="flex flex-col items-center justify-center h-screen">
       <div class="bg-white rounded-lg shadow-lg px-8 py-10">
-        <h1 class="text-4xl text-center font-bold mb-8">Server Status</h1>
+        <h1 class="text-4xl text-center font-bold mb-8">Resource Not Found</h1>
         <div class="flex flex-col items-center space-y-4 italic">
-          <% if (serverStatus.online) { %>
-          <p class="text-green-500 font-semibold">Server is online.</p>
-          <p class="text-gray-700"><%= serverStatus.message %></p>
-          <% } else { %>
-          <p class="text-red-500">Server is offline</p>
-          <% } %>
+          <p class="text-red-500 font-semibold">API route not found!</p>
+          <p class="text-gray-700">
+            The requested API route "<%= error.path %>" doesn't exist to
+            University Management System.
+          </p>
         </div>
       </div>
       <footer class="text-gray-500 text-sm mt-8">
