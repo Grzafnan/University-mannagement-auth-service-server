@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { IStudent, IStudentModel } from './student.interface';
 import { Blood, Gender } from '../../../constants/common';
+import ApiError from '../../../errors/ApiError';
+import httpStatus from 'http-status';
 
 export const StudentSchema = new Schema<IStudent, IStudentModel>(
   {
@@ -28,6 +30,7 @@ export const StudentSchema = new Schema<IStudent, IStudentModel>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     gender: {
       type: String,
@@ -45,6 +48,7 @@ export const StudentSchema = new Schema<IStudent, IStudentModel>(
     contactNo: {
       type: String,
       required: true,
+      unique: true,
     },
     emergencyContactNo: {
       type: String,
@@ -140,6 +144,21 @@ export const StudentSchema = new Schema<IStudent, IStudentModel>(
     },
   }
 );
+
+StudentSchema.pre('save', async function (next) {
+  const isExists = await Student.findOne({
+    email: this.email,
+    contactNo: this.contactNo,
+  });
+
+  if (isExists) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "You can't to be a student with this email and contact number!"
+    );
+  }
+  next();
+});
 
 const Student = model<IStudent, IStudentModel>('Student', StudentSchema);
 
