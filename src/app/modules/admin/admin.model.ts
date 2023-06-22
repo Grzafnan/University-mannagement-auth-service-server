@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { Blood, Gender } from '../../../constants/common';
 import { IAdmin, IAdminModel } from './admin.interface';
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 
 const adminSchema = new Schema<IAdmin, IAdminModel>(
   {
@@ -28,6 +30,7 @@ const adminSchema = new Schema<IAdmin, IAdminModel>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     gender: {
       type: String,
@@ -45,6 +48,7 @@ const adminSchema = new Schema<IAdmin, IAdminModel>(
     contactNo: {
       type: String,
       required: true,
+      unique: true,
     },
     emergencyContactNo: {
       type: String,
@@ -80,6 +84,21 @@ const adminSchema = new Schema<IAdmin, IAdminModel>(
     },
   }
 );
+
+adminSchema.pre('save', async function (next) {
+  const isExists = await Admin.findOne({
+    email: this.email,
+    contactNo: this.contactNo,
+  });
+
+  if (isExists) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "You can't to be a Admin with this email and contact number!"
+    );
+  }
+  next();
+});
 
 const Admin = model<IAdmin, IAdminModel>('Admin', adminSchema);
 
