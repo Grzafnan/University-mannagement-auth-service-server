@@ -30,7 +30,6 @@ const facultySchema = new Schema<IFaculty, IFacultyModel>(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     gender: {
       type: String,
@@ -48,7 +47,6 @@ const facultySchema = new Schema<IFaculty, IFacultyModel>(
     contactNo: {
       type: String,
       required: true,
-      unique: true,
     },
     emergencyContactNo: {
       type: String,
