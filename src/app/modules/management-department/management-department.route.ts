@@ -33,6 +33,10 @@ router.delete(
   auth(ENUM_USER_ROLE.SUPPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   ManagementDepartmentController.deleteManagementDepartment
 );
-router.get('/', ManagementDepartmentController.getAllManagementDepartments);
+router.get(
+  '/',
+  auth(ENUM_USER_ROLE.SUPPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  ManagementDepartmentController.getAllManagementDepartments
+);
 
 export const ManagementDepartmentRoutes = router;
