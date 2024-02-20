@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import catchAsync from '../../../shared/catchAsync';
-import { academicDepartmentService } from './academicDepartment.service';
-import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
+import { paginationFields } from '../../../constants/pagination';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
+import sendResponse from '../../../shared/sendResponse';
+import { academicDepartmentFilterableFields } from './academicDepartment.constant';
 import {
   IAcademicDepartment,
   IAcademicDepartmentFilters,
 } from './academicDepartment.interface';
-import pick from '../../../shared/pick';
-import { academicDepartmentFilterableFields } from './academicDepartment.constant';
-import { paginationFields } from '../../../constants/pagination';
-import { IPaginationOptions } from '../../../interfaces/pagination';
+import { academicDepartmentService } from './academicDepartment.service';
 
 const createDepartment = catchAsync(async (req: Request, res: Response) => {
   const { ...academicDepartment } = req.body;

@@ -1,15 +1,19 @@
 import httpStatus from 'http-status';
+import { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/ApiError';
-import AcademicDepartment from './academicDepartment.model';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { RedisClient } from '../../../shared/redis';
+import {
+  EVENT_ACADEMIC_FACULTY_CREATED,
+  academicDepartmentSearchAbleFields,
+} from './academicDepartment.constant';
 import {
   IAcademicDepartment,
   IAcademicDepartmentFilters,
 } from './academicDepartment.interface';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { academicDepartmentSearchAbleFields } from './academicDepartment.constant';
-import { SortOrder } from 'mongoose';
+import AcademicDepartment from './academicDepartment.model';
 
 const createDepartment = async (
   payload: IAcademicDepartment
@@ -24,6 +28,12 @@ const createDepartment = async (
       'Failed to create academic Department!'
     );
   }
+
+  await RedisClient.set(
+    EVENT_ACADEMIC_FACULTY_CREATED,
+    JSON.stringify(createdDepartment)
+  );
+
   return createdDepartment;
 };
 

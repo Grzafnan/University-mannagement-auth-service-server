@@ -1,13 +1,13 @@
 import express from 'express';
-import { academicDepartmentController } from './academicDepartment.controller';
-import validateRequest from '../../middlewares/validateRequest';
-import { academicDepartmentValidation } from './academicDepartment.validation';
-import auth from '../../middlewares/auth';
 import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
+import { academicDepartmentController } from './academicDepartment.controller';
+import { academicDepartmentValidation } from './academicDepartment.validation';
 const router = express.Router();
 
 router.post(
-  '/create-department',
+  '/create',
   validateRequest(
     academicDepartmentValidation.createAcademicDepartmentZodSchema
   ),

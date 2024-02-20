@@ -6,11 +6,15 @@ import {
 } from './academicFaculty.interface';
 import AcademicFaculty from './academicFaculty.model';
 
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { SortOrder } from 'mongoose';
-import { academicFacultySearchableFields } from './academicFaculty.constant';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { RedisClient } from '../../../shared/redis';
+import {
+  EVENT_ACADEMIC_FACULTY_CREATED,
+  academicFacultySearchableFields,
+} from './academicFaculty.constant';
 
 const createAcademicFaculty = async (
   payload: IAcademicFaculty
@@ -23,6 +27,12 @@ const createAcademicFaculty = async (
       'Failed to create academic faculty!'
     );
   }
+
+  await RedisClient.set(
+    EVENT_ACADEMIC_FACULTY_CREATED,
+    JSON.stringify(createdAcademicFaculty)
+  );
+
   return createdAcademicFaculty;
 };
 

@@ -1,18 +1,19 @@
 import httpStatus from 'http-status';
+import { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/ApiError';
-import {
-  IAcademicSemester,
-  IAcademicSemesterFilters,
-} from './academicSemester.interface';
-import AcademicSemester from './academicSemester.model';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
 import {
   academicSemesterSearchableFields,
   academicSemesterTitleCodeMapper,
 } from './academicSemester.constant';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { SortOrder } from 'mongoose';
+import {
+  IAcademicSemester,
+  IAcademicSemesterCreatedEvent,
+  IAcademicSemesterFilters,
+} from './academicSemester.interface';
+import AcademicSemester from './academicSemester.model';
 
 const createAcademicSemester = async (
   academicSemester: IAcademicSemester
@@ -26,14 +27,11 @@ const createAcademicSemester = async (
       'Invalid academic semester code!!!'
     );
   }
-  const createdAcademicSemester = AcademicSemester.create(academicSemester);
 
-  if (!createdAcademicSemester) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      'Failed to create academic semester!'
-    );
-  }
+  const createdAcademicSemester = await AcademicSemester.create(
+    academicSemester
+  );
+
   return createdAcademicSemester;
 };
 
@@ -131,10 +129,21 @@ const deleteSemester = async (
   return result;
 };
 
+const createAcademicSemesterFromEvent = async (
+  e: IAcademicSemesterCreatedEvent
+): Promise<void> => {
+  const { id, ...data } = e;
+  await AcademicSemester.create({
+    ...data,
+    syncId: id,
+  });
+};
+
 export const AcademicSemesterService = {
   createAcademicSemester,
   getSingleSemester,
   getAllSemesters,
   updateSemester,
   deleteSemester,
+  createAcademicSemesterFromEvent,
 };

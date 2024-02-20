@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
 import httpStatus from 'http-status';
+import { Schema, model } from 'mongoose';
 import ApiError from '../../../errors/ApiError';
 import {
-  IAcademicDepartment,
   AcademicDepartmentModel,
+  IAcademicDepartment,
 } from './academicDepartment.interface';
 
 const academicDepartmentSchema = new Schema<
@@ -39,7 +39,7 @@ academicDepartmentSchema.pre('save', async function (next) {
   if (isExits) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      'Academic Department with the same academic faculty already exists!!'
+      `Academic Department with the same academic ${this.academicFaculty} already exists!!`
     );
   } else {
     next();
