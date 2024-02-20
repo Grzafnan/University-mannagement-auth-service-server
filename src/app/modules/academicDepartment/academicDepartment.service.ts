@@ -4,13 +4,11 @@ import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { RedisClient } from '../../../shared/redis';
-import {
-  EVENT_ACADEMIC_FACULTY_CREATED,
-  academicDepartmentSearchAbleFields,
-} from './academicDepartment.constant';
+import AcademicFaculty from '../academicFaculty/academicFaculty.model';
+import { academicDepartmentSearchAbleFields } from './academicDepartment.constant';
 import {
   IAcademicDepartment,
+  IAcademicDepartmentCreatedEvent,
   IAcademicDepartmentFilters,
 } from './academicDepartment.interface';
 import AcademicDepartment from './academicDepartment.model';
@@ -28,11 +26,6 @@ const createDepartment = async (
       'Failed to create academic Department!'
     );
   }
-
-  await RedisClient.set(
-    EVENT_ACADEMIC_FACULTY_CREATED,
-    JSON.stringify(createdDepartment)
-  );
 
   return createdDepartment;
 };
@@ -132,10 +125,26 @@ const deleteDepartment = async (
   return result;
 };
 
+const createDepartmentFromEvent = async (
+  e: IAcademicDepartmentCreatedEvent
+): Promise<void> => {
+  const academicFaculty = await AcademicFaculty.findOne({
+    syncId: e.academicFacultyId,
+  });
+  const payload = {
+    title: e.title,
+    academicFaculty: academicFaculty?._id,
+    syncId: e.id,
+  };
+
+  await AcademicDepartment.create(payload);
+};
+
 export const academicDepartmentService = {
   createDepartment,
   getAllDepartment,
   getSingleDepartment,
   updateDepartment,
   deleteDepartment,
+  createDepartmentFromEvent,
 };

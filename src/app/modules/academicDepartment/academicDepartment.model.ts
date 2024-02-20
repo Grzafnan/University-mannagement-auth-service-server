@@ -21,6 +21,10 @@ const academicDepartmentSchema = new Schema<
       ref: 'AcademicFaculty',
       required: true,
     },
+    syncId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -34,6 +38,7 @@ academicDepartmentSchema.pre('save', async function (next) {
   const isExits = await AcademicDepartment.findOne({
     title: this.title,
     academicFaculty: this.academicFaculty,
+    syncId: this.syncId,
   });
 
   if (isExits) {

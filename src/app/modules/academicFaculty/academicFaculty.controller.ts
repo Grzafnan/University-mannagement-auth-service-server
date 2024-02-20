@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
-import catchAsync from '../../../shared/catchAsync';
-import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
-import { AcademicFacultyService } from './academicFaculty.service';
+import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
+import sendResponse from '../../../shared/sendResponse';
+import { AcademicFacultyService } from './academicFaculty.service';
 
 import { paginationFields } from '../../../constants/pagination';
 import { IPaginationOptions } from '../../../interfaces/pagination';
+import { academicFacultyFilterableFields } from './academicFaculty.constant';
 import {
   IAcademicFaculty,
   IAcademicFacultyFilters,
 } from './academicFaculty.interface';
-import { academicFacultyFilterableFields } from './academicFaculty.constant';
 
 const createAcademicFaculty = catchAsync(
   async (req: Request, res: Response) => {

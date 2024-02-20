@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import {
   IAcademicFaculty,
+  IAcademicFacultyCreatedEvent,
   IAcademicFacultyFilters,
 } from './academicFaculty.interface';
 import AcademicFaculty from './academicFaculty.model';
@@ -28,7 +29,7 @@ const createAcademicFaculty = async (
     );
   }
 
-  await RedisClient.set(
+  await RedisClient.publish(
     EVENT_ACADEMIC_FACULTY_CREATED,
     JSON.stringify(createdAcademicFaculty)
   );
@@ -117,10 +118,20 @@ const deleteFaculty = async (id: string): Promise<IAcademicFaculty | null> => {
   return result;
 };
 
+const createAcademicFacultyFromEvent = async (
+  e: IAcademicFacultyCreatedEvent
+): Promise<void> => {
+  await AcademicFaculty.create({
+    title: e.title,
+    syncId: e.id,
+  });
+};
+
 export const AcademicFacultyService = {
   createAcademicFaculty,
   getSingleFaculty,
   getAllFaculties,
   updateFaculty,
   deleteFaculty,
+  createAcademicFacultyFromEvent,
 };

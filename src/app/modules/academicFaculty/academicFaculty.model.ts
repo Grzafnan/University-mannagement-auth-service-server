@@ -1,10 +1,10 @@
+import httpStatus from 'http-status';
 import { Schema, model } from 'mongoose';
+import ApiError from '../../../errors/ApiError';
 import {
   AcademicFacultyModel,
   IAcademicFaculty,
 } from './academicFaculty.interface';
-import ApiError from '../../../errors/ApiError';
-import httpStatus from 'http-status';
 
 const academicFacultySchema = new Schema<IAcademicFaculty>(
   {
@@ -12,6 +12,10 @@ const academicFacultySchema = new Schema<IAcademicFaculty>(
       type: String,
       required: true,
       unique: true,
+    },
+    syncId: {
+      type: String,
+      required: true,
     },
   },
   {
@@ -29,7 +33,7 @@ academicFacultySchema.pre('save', async function (next) {
   if (isExist) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      'Academic Faculty is already exists.'
+      `Academic ${isExist.title} Faculty is already exists!`
     );
   } else {
     next();
