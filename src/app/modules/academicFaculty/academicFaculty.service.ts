@@ -127,6 +127,12 @@ const createAcademicFacultyFromEvent = async (
   });
 };
 
+const updateAcademicFacultyFromEvent = async (
+  e: IAcademicFacultyCreatedEvent
+): Promise<void> => {
+  await AcademicFaculty.findOneAndUpdate({ syncId: e.id }, { title: e.title });
+};
+
 export const AcademicFacultyService = {
   createAcademicFaculty,
   getSingleFaculty,
@@ -134,4 +140,5 @@ export const AcademicFacultyService = {
   updateFaculty,
   deleteFaculty,
   createAcademicFacultyFromEvent,
+  updateAcademicFacultyFromEvent,
 };

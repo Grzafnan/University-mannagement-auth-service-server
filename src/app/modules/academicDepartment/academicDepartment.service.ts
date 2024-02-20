@@ -140,6 +140,21 @@ const createDepartmentFromEvent = async (
   await AcademicDepartment.create(payload);
 };
 
+const updateDepartmentFromEvent = async (
+  e: IAcademicDepartmentCreatedEvent
+): Promise<void> => {
+  await AcademicFaculty.findOneAndUpdate(
+    { syncId: e.academicFacultyId },
+    {
+      $set: {
+        title: e.title,
+        academicFaculty: e.academicFacultyId,
+        syncId: e.id,
+      },
+    }
+  );
+};
+
 export const academicDepartmentService = {
   createDepartment,
   getAllDepartment,
@@ -147,4 +162,5 @@ export const academicDepartmentService = {
   updateDepartment,
   deleteDepartment,
   createDepartmentFromEvent,
+  updateDepartmentFromEvent,
 };

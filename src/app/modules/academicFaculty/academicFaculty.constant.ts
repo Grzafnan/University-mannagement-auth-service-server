@@ -6,3 +6,4 @@ export const academicFacultySearchableFields: string[] = [
 export const academicFacultyFilterableFields: string[] = ['title'];
 
 export const EVENT_ACADEMIC_FACULTY_CREATED = 'academicFaculties.created';
+export const EVENT_ACADEMIC_FACULTY_UPDATED = 'academicFaculties.updated';
